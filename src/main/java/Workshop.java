@@ -13,6 +13,14 @@ public class Workshop {
         return out;
     }
 
+    public static Integer[] getRandomIntegers(Integer from, Integer to, Integer count) {
+        Integer[] out = new Integer[count];
+        for (int i = 0; i < count; i++) {
+            out[i] = (int) ((Math.random() * (to - from)) + to);
+        }
+        return out;
+    }
+
     public static void output(String text, List<List<Integer>> list) {
         System.out.println(text);
         System.out.println(list);
@@ -58,7 +66,20 @@ public class Workshop {
         }
     }
 
+    public static void output(String text, Integer[] array){
+        System.out.print(text+" ");
+        for (Integer x: array) {
+            System.out.print(x+" ");
+        }
+        System.out.println();
+    }
+
     public static <T> T[][] deepCopy(T[][] matrix) {
         return java.util.Arrays.stream(matrix).map(el -> el.clone()).toArray($ -> matrix.clone());
+    }
+
+    public static Integer inputInt(String text) {
+        System.out.print( text+"  " );
+        return (new Scanner( System.in )).nextInt();
     }
 }
