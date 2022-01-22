@@ -41,12 +41,53 @@ public class Workshop_03_03 {
         }
     }
 
+    public static void output(String text, Integer[][] array){
+        System.out.println(text);
+        for (Integer[] row: array) {
+            for (Integer x: row) {
+                System.out.print(x+" ");
+            }
+            System.out.println();
+        }
+    }
+
+    public static void output(String text, Stack<Integer> stack) {
+        if (stack.isEmpty()) {
+            if (text!=null) {
+                System.out.println( "" + text + "-");
+            }
+            return;
+        }
+        Integer x = stack.peek();
+        stack.pop();
+        System.out.print( "" + (text!=null ? (text+""):""));
+        output((String)null,stack);
+        System.out.print(x + " ");
+        if (text!=null) {
+            System.out.println();
+        }
+        stack.push(x);
+    }
+
+    public static void output(Object text){
+        System.out.println(text);
+    }
+
+    public static void output(String text, List<List<Integer>> list) {
+        System.out.println(text);
+        System.out.println(list);
+    }
+
+    public static <T> T[][] deepCopy(T[][] matrix) {
+        return java.util.Arrays.stream(matrix).map(el -> el.clone()).toArray($ -> matrix.clone());
+    }
+
     public static void findComposStrongConnByKosaraju(Integer[][] matrixP) {
-        Integer[][] matrix = Workshop.deepCopy(matrixP);
+        Integer[][] matrix = deepCopy(matrixP);
 
         List<List<Integer>> composStrongConn = new ArrayList<>();
 
-        Workshop.output("Граф : ", matrix);
+        output("Граф : ", matrix);
 
         Stack<Integer> stack = new Stack<>();
 
@@ -55,28 +96,28 @@ public class Workshop_03_03 {
                 if (stack.contains(u)==false) stack.push(u);
             });
         }
-        Workshop.output("Стек після DFS: ", stack);
+        output("Стек після DFS: ", stack);
 
         transponov(matrix);
-        Workshop.output("Транспонований граф : ", matrix);
+        output("Транспонований граф : ", matrix);
 
         while (!stack.isEmpty()) {
             Integer pop = stack.pop();
-            Workshop.output("****************");
-            Workshop.output("Взяли вершину "+pop+" з стеку, стек: ", stack);
+            output("****************");
+            output("Взяли вершину "+pop+" з стеку, стек: ", stack);
             List<Integer> currCompoStrongConn = new ArrayList();
             dfs(matrix,pop,(m,u)->{
                 currCompoStrongConn.add(u);
                 stack.remove(u);
                 removeVertex(matrix,u);
             });
-            Workshop.output("Стек після видалення: ", stack);
-            Workshop.output("Матриця після видалення вершин: ", matrix);
-            Workshop.output("Компонента сильної звязності: "+currCompoStrongConn+", стек: ", stack);
+            output("Стек після видалення: ", stack);
+            output("Матриця після видалення вершин: ", matrix);
+            output("Компонента сильної звязності: "+currCompoStrongConn+", стек: ", stack);
             composStrongConn.add(currCompoStrongConn);
         }
-        Workshop.output("****************");
-        Workshop.output("Всі компоненти сильної звязності: ",composStrongConn);
+        output("****************");
+        output("Всі компоненти сильної звязності: ",composStrongConn);
     }
 
     public static void main(String[] args) {
@@ -89,6 +130,5 @@ public class Workshop_03_03 {
         };
         findComposStrongConnByKosaraju(matrix);
     }
-
 
 }

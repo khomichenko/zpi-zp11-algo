@@ -1,5 +1,7 @@
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class Workshop_11_3 {
 
@@ -136,41 +138,97 @@ public class Workshop_11_3 {
         }
         values[head] = t;
     }
+    public static void output(Object text){
+        System.out.println(text);
+    }
+
+    /**
+     * Отримати масив випадково згенерованих чисел від from до to кількістью count
+     * @param from від
+     * @param to до
+     * @param count кількість
+     * @return одновимірний масив
+     */
+    public static Integer[] getRandomIntegers(Integer from, Integer to, Integer count) {
+        Integer[] out = new Integer[count];
+        for (int i = 0; i < count; i++) {
+            out[i] = (int) (Math.random() * (to - from) + from);
+        }
+        return out;
+    }
+
+    /**
+     * Вивести на екран двовимірний масив
+     * @param text текст-підказка
+     * @param array двовимірний масив
+     */
+    public static void output2D(String text, Object[][] array) {
+        System.out.println(text);
+
+        for (int i = 0; i < array.length; i++) {
+            System.out.print(" [ ");
+            for (int j = 0; j < array[i].length; j++) {
+                System.out.print(array[i][j]+(j<array[i].length-1?"\t\t":""));
+            }
+            System.out.println(" ] ");
+        }
+    }
+
+    /**
+     *  Об'єднати два масива з елементами типу Т
+     * @param array1 масив 1
+     * @param array2 масив 2
+     * @param <T> тип елементів
+     * @return масив
+     */
+    static <T> T[] concat(T[] array1, T[] array2) {
+        return Stream.concat(Arrays.stream(array1), Arrays.stream(array2)).toArray(size -> (T[]) Array.newInstance(array1.getClass().getComponentType(), size));
+    }
+
+    /**
+     * Вивести на екран одновимірний масив
+     * @param text текст-підказка
+     * @param array одновимірний масив
+     */
+    public static void output(String text, Object[] array) {
+        System.out.println(text);
+        System.out.print(" [ ");
+        for (int i = 0; i < array.length; i++) {
+            System.out.print(array[i]+(i<array.length-1?"\t\t":""));
+        }
+        System.out.println(" ] ");
+    }
 
     public static void main(String[] args) {
-        Integer maxSize = 2; Integer powerFrom = 5; Integer powerTo = 10;
+        Integer maxSize = 10; Integer powerFrom = 5; Integer powerTo = 30;
         {
-            Workshop.output("************** ПІРАМІДАЛЬНЕ СОРТУВАННЯ **************");
+            output("************** ПІРАМІДАЛЬНЕ СОРТУВАННЯ **************");
             Device[][] devices = {
-                    Arrays.stream(Workshop.getRandomIntegers(powerFrom,powerTo,maxSize)).map((p)->new Device(p)).toArray(Device[]::new),
-                    Arrays.stream(Workshop.getRandomIntegers(powerFrom,powerTo,maxSize)).map((p)->new Device(p)).toArray(Device[]::new)
+                    Arrays.stream(getRandomIntegers(powerFrom,powerTo,maxSize)).map((p)->new Device(p)).toArray(Device[]::new),
+                    Arrays.stream(getRandomIntegers(powerFrom,powerTo,maxSize)).map((p)->new Device(p)).toArray(Device[]::new)
             };
-            Workshop.output2D("Пристрої списків",devices);
+            output2D("Пристрої списків",devices);
             Device[] devicesAll = {};
             for (int i = 0; i < devices.length; i++) {
-                devicesAll = Workshop.concat(devicesAll, devices[i]);
+                devicesAll = concat(devicesAll, devices[i]);
             }
-            Workshop.output("Всі пристрої (не відсортовані)",devicesAll);
-            heapSort( devicesAll, (x) -> {
-                return x.power;
-            });
+            output("Всі пристрої (не відсортовані)",devicesAll);
+            heapSort( devicesAll, (x) -> x.power);
             Workshop.output("Всі пристрої (відсортовані за пірамідальним алгоритмом)", devicesAll);
         }
         /*{
-            Workshop.output("************** ПЛАВНЕ СОРТУВАННЯ **************");
+            output("************** ПЛАВНЕ СОРТУВАННЯ **************");
             Device[][] devices = {
-                    Arrays.stream(Workshop.getRandomIntegers(powerFrom,powerTo,maxSize)).map((p)->new Device(p)).toArray(Device[]::new),
+                    Arrays.stream(getRandomIntegers(powerFrom,powerTo,maxSize)).map((p)->new Device(p)).toArray(Device[]::new),
             };
-            Workshop.output2D("Пристрої списків",devices);
+            output2D("Пристрої списків",devices);
             Device[] devicesAll = {};
             for (int i = 0; i < devices.length; i++) {
-                devicesAll = Workshop.concat(devicesAll, devices[i]);
+                devicesAll = concat(devicesAll, devices[i]);
             }
-            Workshop.output("Всі пристрої (не відсортовані)",devicesAll);
-            smoothSort( devicesAll, (x) -> {
-                return x.power;
-            });
-            Workshop.output("Всі пристрої (відсортовані за плавним алгоритмом)", devicesAll);
+            output("Всі пристрої (не відсортовані)",devicesAll);
+            smoothSort( devicesAll, (x) -> x.power );
+            output("Всі пристрої (відсортовані за плавним алгоритмом)", devicesAll);
         }*/
     }
 }
